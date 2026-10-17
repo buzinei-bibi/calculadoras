@@ -1,1 +1,27 @@
 @import "tailwindcss";
+
+:root {
+  --fonte-display: "Barlow Condensed", "Arial Narrow", system-ui, sans-serif;
+  --fonte-texto: "Barlow", system-ui, sans-serif;
+  /* grafite quente: combina com o logotipo (calculadora preta) e com o laranja */
+  --fundo: #0c0a09;
+  color-scheme: dark;
+}
+
+html, body, #root {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background-color: var(--fundo);
+  color: #fafaf9;
+  font-family: var(--fonte-texto);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* esconde as setinhas dos campos numéricos */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+input[type="number"] { -moz-appearance: textfield; appearance: textfield; }

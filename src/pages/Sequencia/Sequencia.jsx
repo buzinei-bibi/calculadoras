@@ -1,96 +1,45 @@
 import { useState } from "react";
-import Card from "../../components/Card/Card";
-import Result from "../../components/Results/Results";
+import CalcLayout, { Campo, Resultado } from "../../components/Calc/Calc";
+import { formatar, lerNumero } from "../../data/calculadoras";
 
+// acima disso a lista vira uma parede de números; mostramos só a contagem e a soma
+const LIMITE_LISTA = 500;
 
 export default function Sequencia() {
+  const [numero, setNumero] = useState("");
 
-    const [numero, setNumero] = useState("");
-    const [resultado, setResultado] = useState("-");
+  const n = lerNumero(numero);
+  const ok = Number.isInteger(n) && n >= 0;
+  const erro = numero && !ok ? "informe um número inteiro, de 0 para cima" : null;
+  const sequencia = ok && n <= LIMITE_LISTA ? Array.from({ length: n + 1 }, (_, i) => i) : [];
 
-    function handleSubmit(e) {
-        e.preventDefault();
-
-        const num = parseInt(numero);
-
-        if (isNaN(num) || num < 0) {
-            setResultado("-");
-            return;
-        }
-
-        const sequencia = [];
-
-        for (let i = 0; i <= num; i++) {
-            sequencia.push(i);
-        }
-
-        setResultado(sequencia.join(", "));
-        setNumero("");
-    }
-
-    return (
-        <Card
-            title="gerador de sequência"
-            description="veja todos os números de zero até o número informado"
-        >
-
-            {/* Children */}
-
-            <form
-                id="form-sequencia"
-                onSubmit={handleSubmit}
-                className="space-y-4"
-            >
-
-                <div>
-
-                    <label
-                        htmlFor="numero-limite"
-                        className="block text-sm font-medium text-gray-700 mb-1"
-                    >
-                        informe um número inteiro positivo:
-                    </label>
-
-                    <input
-                        type="number"
-                        id="numero-limite"
-                        min="1"
-                        step="1"
-                        placeholder="ex: 7"
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-900"
-                        value={numero}
-                        onChange={(e) => setNumero(e.target.value)}
-                        required
-                    />
-
-                </div>
-
-                <button
-                    type="submit"
-                    className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded-md transition duration-200"
-                >
-                    gerar números anteriores
-                </button>
-
-            </form>
-
-            <section
-                aria-live="polite"
-                className="mt-6 p-4 bg-indigo-50 rounded-md text-gray-700"
-            >
-
-                <h2 className="font-semibold text-indigo-900 mb-2">
-                    números anteriores (desde o 0):
-                </h2>
-
-                <div
-                    className="font-mono text-indigo-700 text-lg font-bold bg-white p-3 rounded border border-indigo-100 min-h[44px"
-                >
-                    {resultado}
-                </div>
-
-            </section>
-
-        </Card>
-    );
+  return (
+    <CalcLayout
+      id="sequencia"
+      podeLimpar={numero !== ""}
+      onLimpar={() => setNumero("")}
+      resultados={
+        <>
+          <div className="calc-grade">
+            <Resultado destaque label="números na sequência" valor={ok ? formatar(n + 1) : null} />
+            <Resultado label="último" valor={ok ? formatar(n) : null} />
+            <Resultado label="soma de todos" valor={ok ? formatar((n * (n + 1)) / 2) : null} />
+          </div>
+          {sequencia.length > 0 && (
+            // key: a lista anima de novo a cada número novo
+            <div key={n} className="calc-chips" aria-label={`números de 0 até ${n}`}>
+              {sequencia.map((i) => (
+                <span key={i} className="calc-chip" style={{ "--i": i }}>
+                  {i}
+                </span>
+              ))}
+            </div>
+          )}
+          {ok && n > LIMITE_LISTA && <p className="calc-aviso">a lista aparece para números até {LIMITE_LISTA}.</p>}
+        </>
+      }
+    >
+      <Campo id="numero-limite" label="até qual número?" inputMode="numeric" placeholder="7" value={numero} onChange={(e) => setNumero(e.target.value)} erro={erro} autoFocus />
+    </CalcLayout>
+  );
 }
