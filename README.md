@@ -1,6 +1,6 @@
 # calculadoras
 
-projeto feito em sala de aula que reúne seis calculadoras do dia a dia em um só lugar, com uma home animada no mesmo estilo do portal [taubaté esportes](https://github.com/buzinei-bibi/esportes).
+projeto feito em sala de aula que reúne seis calculadoras do dia a dia em um só lugar: tinta, metros, matemática, sequência, celsius e escolar. é só escolher a calculadora, digitar os valores e o resultado aparece na hora, sem enrolação e sem precisar decorar fórmula.
 
 ## link do projeto
 
